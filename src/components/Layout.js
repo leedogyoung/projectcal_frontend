@@ -17,7 +17,7 @@ const Layout = (props) => {
     <div>
       <div>
         {head && <header>
-          헤더부분 입니다 !!이부분 수정하기!!
+          <div>헤더부분 입니다 !!이부분 수정하기!!</div>
         </header>}
 
         {/* main쪽은 건들지 X */}
