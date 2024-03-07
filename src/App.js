@@ -4,10 +4,11 @@ import NewMember from 'pages/NewMember';
 import GradeCal from 'pages/GradeCal';
 import ByteCount from 'pages/ByteCount';
 // import Layout from './components/Layout';
-import useAxiosInterceptor from 'hooks/useAxiosInterceptor';
+// import useAxiosInterceptor from 'hooks/useAxiosInterceptor';
 
 function App() {
-  useAxiosInterceptor();
+  // useAxiosInterceptor();
+
   return (
     <Routes>
       <Route>

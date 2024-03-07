@@ -1,11 +1,11 @@
 import styles from 'css/Login.module.css';
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+// import { useSelector } from "react-redux";
 import { useState, useEffect, useRef } from 'react';
 import { svgList } from "../assets/svg";
 import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
-import {useDispatch} from "react-redux";
+// import {useDispatch} from "react-redux";
 import { setToken } from 'store/modules/user';
 
 
@@ -24,11 +24,13 @@ const Login = () => {
 
   const checkInfo = async(e) =>{
     try{
-      const response = await axios.post(`${process.env.REACT_APP_API_URL}/auth/signToken`, {
-        name: email,
+      // const response = await axios.post(`${process.env.REACT_APP_API_URL}/auth/signToken`, {
+      const response = await axios.post('http://localhost:8000/auth/login', {
+        email: email,
         pwd: password
       })
-      navigate('/ByteCount', {state: {signToken: response.data.signToken}});
+      // navigate('/ByteCount', {state: {signToken: response.data.signToken}});
+      navigate('/ByteCount');
     } catch(error){
       const errorResponse = error.response;
       console.log(errorResponse.data.statusCode);

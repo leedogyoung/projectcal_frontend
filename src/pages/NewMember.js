@@ -1,11 +1,11 @@
 import styles from 'css/NewMember.module.css';
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+// import { useSelector } from "react-redux";
 import { useState, useEffect, useRef } from 'react';
 import { svgList } from "../assets/svg";
 import axios from "axios";
 import {useNavigate, useSearchParams} from "react-router-dom";
-import {useDispatch} from "react-redux";
+// import {useDispatch} from "react-redux";
 import { setToken } from 'store/modules/user';
 
 
@@ -34,17 +34,15 @@ const NewMember = () => {
 
   const sendInfo = async(e) =>{
     try{
-      const response = await axios.post(`${process.env.REACT_APP_API_URL}/auth/signup`, {
+      // const response = await axios.post(`${process.env.REACT_APP_API_URL}/auth/signup`, {
+      const response = await axios.post('http://localhost:8000/auth/signup', {
         name: userName,
         email: email,
         tel: tel,
         pwd: password
       })
       navigate('/Login');
-    } catch(error){
-      const errorResponse = error.response;
-      console.log(errorResponse.data.statusCode);
-    }
+    } catch(err){console.log(err)}
   };
 
 return (
