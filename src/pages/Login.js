@@ -29,6 +29,8 @@ const Login = () => {
         email: email,
         pwd: password
       })
+      // 토큰을 로컬 스토리지에 저장
+      localStorage.setItem('token', response.data.token);
       // navigate('/ByteCount', {state: {signToken: response.data.signToken}});
       navigate('/ByteCount');
     } catch(error){
@@ -36,6 +38,25 @@ const Login = () => {
       console.log(errorResponse.data.statusCode);
     }
   };
+
+  // const checkInfo = async(e) =>{
+  //   try{
+  //     const response = await axios.post('http://localhost:8000/auth/login', {
+  //       email: email,
+  //       pwd: password
+  //     });
+  //     // 토큰을 로컬 스토리지에 저장
+  //     if(response.data && response.data.token) {
+  //       localStorage.setItem('token', response.data.accessToken);
+  //       navigate('/ByteCount');
+  //     } else {
+  //       // 토큰이 없는 경우의 처리 로직
+  //       console.error("토큰이 응답에 포함되어 있지 않습니다.");
+  //     }
+  //   } catch(error){
+  //     console.error("로그인 요청 처리 중 오류 발생:", error);
+  //   }
+  // };
 
 return (
 <div>

@@ -10,14 +10,26 @@ import { setToken } from 'store/modules/user';
 
 
 const ByteCount = () => {
+  const navigate = useNavigate();
 
-  const logout = async(e) =>{
-    try{
-      const response = await axios.post('http://localhost:8000/auth/logout', {
-      })
-      console.log("로그아웃되었습니다")
-    } catch(err){console.log(err)}
+
+  // const logout = async(e) =>{
+  //   try{
+  //     const response = await axios.post('http://localhost:8000/auth/logout', {
+  //     })
+  //     console.log("로그아웃되었습니다")
+  //   } catch(err){console.log(err)}
+  // };
+
+  const logout = () => {
+    // 토큰 삭제
+    localStorage.removeItem('token');
+    console.log("로그아웃되었습니다")
+    // 사용자를 로그인 페이지로 리디렉션
+    navigate('/login');
   };
+  
+  
 
 return (
 <div>
