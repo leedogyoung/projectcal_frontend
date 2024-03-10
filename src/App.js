@@ -15,6 +15,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/newmember" element={<NewMember />} />
         <Route path="/gradecal" element={<GradeCal />} />
+        <Route path="/" element={<ByteCount />} />
         <Route path="/bytecount" element={<ByteCount />} />
       </Route>
     </Routes>

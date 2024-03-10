@@ -1,70 +1,65 @@
 import styles from 'css/Login.module.css';
 import { Link } from "react-router-dom";
-// import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useState, useEffect, useRef } from 'react';
 import { svgList } from "../assets/svg";
 import axios from "axios";
-import { useNavigate, useLocation } from "react-router-dom";
-// import {useDispatch} from "react-redux";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { setToken } from 'store/modules/user';
 
-
 const Login = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const navigate = useNavigate();
+  const [error, setError] = useState('');
 
-  const onChangeEmail = e =>{
-    setEmail(e.target.value);
+  const logout = () => {
+    // 토큰 삭제
+    localStorage.removeItem('token');
+    console.log("로그아웃되었습니다")
+    // 사용자를 로그인 페이지로 리디렉션
+    navigate('/login');
   };
 
-  const onChangePassword = e =>{
-    setPassword(e.target.value);
-  };
-
-  const checkInfo = async(e) =>{
+  const handleSubmit = async(e) => {
+    e.preventDefault();
     try{
-      // const response = await axios.post(`${process.env.REACT_APP_API_URL}/auth/signToken`, {
       const response = await axios.post('http://localhost:8000/auth/login', {
         email: email,
         pwd: password
-      })
-      // 토큰을 로컬 스토리지에 저장
-      localStorage.setItem('token', response.data.token);
-      // navigate('/ByteCount', {state: {signToken: response.data.signToken}});
-      navigate('/ByteCount');
+      });
+      localStorage.setItem('token', response.data.accessToken);
+      navigate('/');
     } catch(error){
       const errorResponse = error.response;
       console.log(errorResponse.data.statusCode);
     }
   };
 
-  // const checkInfo = async(e) =>{
-  //   try{
-  //     const response = await axios.post('http://localhost:8000/auth/login', {
-  //       email: email,
-  //       pwd: password
-  //     });
-  //     // 토큰을 로컬 스토리지에 저장
-  //     if(response.data && response.data.token) {
-  //       localStorage.setItem('token', response.data.accessToken);
-  //       navigate('/ByteCount');
-  //     } else {
-  //       // 토큰이 없는 경우의 처리 로직
-  //       console.error("토큰이 응답에 포함되어 있지 않습니다.");
-  //     }
-  //   } catch(error){
-  //     console.error("로그인 요청 처리 중 오류 발생:", error);
-  //   }
-  // };
-
-return (
-<div>
-  로그인 페이지입니다
-  <input placeholder='이메일' value={email} onChange = {onChangeEmail}></input>
-  <input placeholder='비밀번호' value={password} onChange = {onChangePassword}></input>
-  <button onClick={checkInfo}>로그인</button>
-</div>
-);};
+  return (
+    <div className={styles.wrapper}> 
+      <div className={styles.loginContainer}>
+        <h2>로그인</h2>
+          <form>
+          <label>
+            <div>이메일:</div>
+            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+          </label>
+          <label>
+            <div>비밀번호:</div>
+            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+          </label>
+          <button onClick={handleSubmit}>로그인</button>
+          {error && <div style={{ color: 'red' }}>{error}</div>}
+          <button onClick={logout}>로그아웃</button>
+        </form>
+        <div className={styles.links}>
+          <Link to="/newmember" className={styles.link}>회원가입</Link>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 export default Login;

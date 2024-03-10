@@ -1,0 +1,75 @@
+.byteCountContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    height: 100vh;
+    background-color: #fff;
+    color: #888888;
+    padding: 20px;
+    font-family: 'Malgun Gothic', Dotum, sans-serif;
+  }
+  
+  .links {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  
+  .link {
+    margin: 0 15px;
+    color: #0BDF24;
+    text-decoration: none;
+  }
+  
+  .section {
+    display: flex;
+    flex-direction: row; 
+    justify-content: flex-start; 
+    align-items: center; 
+    width: 100%; 
+    margin-bottom: 30px;
+  }
+  
+  .titleInput {
+    width: 30%;
+    margin-right: auto; 
+  }
+  
+  .documentWrite {
+    width: 100%;
+    text-align: center;
+    font-size: 2em;
+    margin-bottom: 40px;
+    display: flex;
+    justify-content: center; 
+    align-items: center; }
+  
+  
+  
+  .aiRecommendation, .textInput {
+    width: 100%;
+  }
+  
+  .aiInput, .titleInput input, .textInput textarea {
+    margin-top: 5px;
+    border: 1px solid #ddd;
+    color: #888888;
+  }
+  
+  .aiInput {
+    pointer-events: none;
+    background-color: #f2f2f2;
+  }
+  
+  .textInput {
+    position: relative;
+    flex: 1;
+  }
+  
+  .textInput textarea {
+    flex: 1;
+  }
+  
+    

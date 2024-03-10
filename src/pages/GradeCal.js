@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from "react-router-dom";
-// import { useSelector, useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { setToken } from 'store/modules/user';
@@ -12,6 +12,9 @@ const GradeCal = () => {
   const [percent, setPercent] = useState(20)
   const [percent2, setPercent2] = useState(40)
   const [percent3, setPercent3] = useState(40)
+  const subjects = ["국어", "수학", "영어", "과학", "사회", "기타"];
+
+  const [gradesResult, setGradesResult] = useState({ grade1: '', grade2: '', grade3: '', totalGrade: '' });
 
   const handlePercentChange = e =>{
     const value = e.target.value.replace(/[^0-9]/g, '');
@@ -29,13 +32,13 @@ const GradeCal = () => {
   };
 
   const [rows, setRows] = useState([
-    { id: Date.now(), subject: "", semester1Units: "", semester1Grade: "", semester2Units: "", semester2Grade: "" },
+    { id: Date.now(), subject: "",subjectName:"", semester1Units: "", semester1Grade: "", semester2Units: "", semester2Grade: "" },
   ]);
   const [rows2, setRows2] = useState([
-    { id: Date.now(), subject: "", semester1Units: "", semester1Grade: "", semester2Units: "", semester2Grade: "" },
+    { id: Date.now(), subject: "",subjectName:"", semester1Units: "", semester1Grade: "", semester2Units: "", semester2Grade: "" },
   ]);
   const [rows3, setRows3] = useState([
-    { id: Date.now(), subject: "", semester1Units: "", semester1Grade: "", semester2Units: "", semester2Grade: "" },
+    { id: Date.now(), subject: "",subjectName:"", semester1Units: "", semester1Grade: "", semester2Units: "", semester2Grade: "" },
   ]);
 
   // 새로운 row 추가
@@ -43,6 +46,7 @@ const GradeCal = () => {
     setRows([...rows, {
         id: Date.now(),
         subject: "",
+        subjectName:"",
         semester1Units: "",
         semester1Grade: "",
         semester2Units: "",
@@ -53,6 +57,7 @@ const GradeCal = () => {
     setRows2([...rows2, {
         id: Date.now(),
         subject: "",
+        subjectName:"",
         semester1Units: "",
         semester1Grade: "",
         semester2Units: "",
@@ -63,6 +68,7 @@ const GradeCal = () => {
     setRows3([...rows3, {
         id: Date.now(),
         subject: "",
+        subjectName:"",
         semester1Units: "",
         semester1Grade: "",
         semester2Units: "",
@@ -93,6 +99,37 @@ const GradeCal = () => {
   const updateField3 = (id, field, value) => {
     setRows3(rows3.map(row => row.id === id ? { ...row, [field]: value } : row));
   };
+
+   const calculateGrades = () => {
+     const calculateYearGrade = (rows) => {
+       let totalUnits = 0;
+       let totalGradeUnits = 0;
+       rows.forEach(row => {
+         const semester1Units = parseInt(row.semester1Units, 10) || 0;
+         const semester1Grade = parseInt(row.semester1Grade, 10) || 0;
+         const semester2Units = parseInt(row.semester2Units, 10) || 0;
+         const semester2Grade = parseInt(row.semester2Grade, 10) || 0;
+
+         totalUnits += semester1Units + semester2Units;
+         totalGradeUnits += (semester1Units * semester1Grade) + (semester2Units * semester2Grade);
+       });
+       return totalUnits > 0 ? totalGradeUnits / totalUnits : 0;
+     };
+
+     const grade1 = calculateYearGrade(rows);
+     const grade2 = calculateYearGrade(rows2);
+     const grade3 = calculateYearGrade(rows3);
+     const totalGrade = (grade1 * percent + grade2 * percent2 + grade3 * percent3) / (parseInt(percent, 10) + parseInt(percent2, 10) + parseInt(percent3, 10));
+
+     setGradesResult({ grade1: grade1.toFixed(2), grade2: grade2.toFixed(2), grade3: grade3.toFixed(2), totalGrade: totalGrade.toFixed(2) });
+   };
+
+   const resetForm = () => {
+     setRows([{ id: Date.now(), year: "1학년", subject: "", subjectName: "", semester1Units: "", semester1Grade: "", semester2Units: "", semester2Grade: "" }]);
+     setRows2([{ id: Date.now(), year: "2학년", subject: "", subjectName: "", semester1Units: "", semester1Grade: "", semester2Units: "", semester2Grade: "" }]);
+     setRows3([{ id: Date.now(), year: "3학년", subject: "", subjectName: "", semester1Units: "", semester1Grade: "", semester2Units: "", semester2Grade: "" }]);
+    setGradesResult({ grade1: '', grade2: '', grade3: '', totalGrade: '' });
+   };
 
   return (
     <div className={styles.gradeCalculator}>
@@ -146,13 +183,18 @@ const GradeCal = () => {
             {rows.map((row, index) => (
               <div key={index} className={styles.inputRow} style={{ width: '100%' }}>
                 <div className={styles.inputItem} style={{ width: '6%' }}>
-                  드롭
+                <select className={styles.gradeInput} value={row.subject} onChange={(e) => updateField(row.id, "subject", e.target.value)}>
+                      <option value="">선택</option>
+                      {subjects.map(subject => (
+                        <option key={subject} value={subject}>{subject}</option>
+                      ))}
+                    </select>
                 </div>
                 <div className={styles.inputItem} style={{ width: '17%' }}>
                   <input className= {styles.gradeInput}      
                   type="text"
-                  value={row.subject}
-                  onChange={(e) => updateField(row.id, 'subject', e.target.value)}></input>
+                  value={row.subjectName}
+                  onChange={(e) => updateField(row.id, 'subjectName', e.target.value)}></input>
                 </div>
                 <div className={styles.inputItem} style={{ width: '17%' }}>
                   <input className= {styles.gradeInput}
@@ -201,13 +243,18 @@ const GradeCal = () => {
             {rows2.map((row, index) => (
               <div key={index} className={styles.inputRow} style={{ width: '100%' }}>
                 <div className={styles.inputItem} style={{ width: '6%' }}>
-                  드롭
+                <select className={styles.gradeInput} value={row.subject} onChange={(e) => updateField2(row.id, "subject", e.target.value)}>
+                      <option value="">선택</option>
+                      {subjects.map(subject => (
+                        <option key={subject} value={subject}>{subject}</option>
+                      ))}
+                    </select>
                 </div>
                 <div className={styles.inputItem} style={{ width: '17%' }}>
                   <input className= {styles.gradeInput}      
                   type="text"
-                  value={row.subject}
-                  onChange={(e) => updateField2(row.id, 'subject', e.target.value)}></input>
+                  value={row.subjectName}
+                  onChange={(e) => updateField2(row.id, 'subjectName', e.target.value)}></input>
                 </div>
                 <div className={styles.inputItem} style={{ width: '17%' }}>
                   <input className= {styles.gradeInput}
@@ -256,13 +303,18 @@ const GradeCal = () => {
             {rows3.map((row, index) => (
               <div key={index} className={styles.inputRow} style={{ width: '100%' }}>
                 <div className={styles.inputItem} style={{ width: '6%' }}>
-                  드롭
+                <select className={styles.gradeInput} value={row.subject} onChange={(e) => updateField3(row.id, "subject", e.target.value)}>
+                      <option value="">선택</option>
+                      {subjects.map(subject => (
+                        <option key={subject} value={subject}>{subject}</option>
+                      ))}
+                    </select>
                 </div>
                 <div className={styles.inputItem} style={{ width: '17%' }}>
                   <input className= {styles.gradeInput}      
                   type="text"
-                  value={row.subject}
-                  onChange={(e) => updateField3(row.id, 'subject', e.target.value)}></input>
+                  value={row.subjectName}
+                  onChange={(e) => updateField3(row.id, 'subjectName', e.target.value)}></input>
                 </div>
                 <div className={styles.inputItem} style={{ width: '17%' }}>
                   <input className= {styles.gradeInput}
@@ -277,16 +329,24 @@ const GradeCal = () => {
                   onChange={(e) => updateField3(row.id, 'semester1Grade', e.target.value)}></input>
                 </div>
                 <div className={styles.inputItem} style={{ width: '17%' }}>
-                  <input className= {styles.gradeInput}
-                  type="text"
-                  value={row.semester2Units}
-                  onChange={(e) => updateField3(row.id, 'semester2Units', e.target.value)}></input>
+                    <input 
+                    className={styles.gradeInput} 
+                    type="text" 
+                    value={row.semester2Units} 
+                    onChange={(e) => updateField3(row.id, 'semester2Units', e.target.value)} 
+                    disabled={studentType === '재학생'}
+                    style={{backgroundColor :studentType === '재학생' ? '#D0D0D0' :""}} 
+                    />
                 </div>
                 <div className={styles.inputItem} style={{ width: '17%' }}>
-                  <input className= {styles.gradeInput}
-                  type="text"
-                  value={row.semester2Grade}
-                  onChange={(e) => updateField3(row.id, 'semester2Grade', e.target.value)}></input>
+                  <input 
+                    className={styles.gradeInput} 
+                    type="text" 
+                    value={row.semester2Grade} 
+                    onChange={(e) => updateField3(row.id, 'semester2Grade', e.target.value)} 
+                    disabled={studentType === '재학생'}
+                    style={{backgroundColor :studentType === '재학생' ? '#D0D0D0' :""}}
+                  />
                 </div>
                 {/* 추가버튼 */}
                 <div className={styles.inputItem} style={{ width: '9%' }}>
@@ -301,6 +361,20 @@ const GradeCal = () => {
             </div>
           </div>
       </div>
+      <div className={styles.buttonContainer} style={{ display: 'flex', justifyContent: 'center' }}>
+              <button className={styles.calculateButton} onClick={calculateGrades}>성적 산출하기</button>
+              <button className={styles.calculateButton} onClick={resetForm}>새로 시작</button>
+            </div>
+            <div className={styles.resultsSection}>
+              <div className={styles.resultItem}><span className={styles.resultTitle}>1학년 평균 등급: </span><span className={styles.resultValue}>{gradesResult.grade1}</span></div>
+              <div className={styles.resultItem}><span className={styles.resultTitle}>2학년 평균 등급: </span><span className={styles.resultValue}>{gradesResult.grade2}</span></div>
+              <div className={styles.resultItem}><span className={styles.resultTitle}>3학년 평균 등급: </span><span className={styles.resultValue}>{gradesResult.grade3}</span></div>
+              <div className={styles.resultItem}><span className={styles.resultTitle}>전체 평균 등급: </span><span className={styles.resultValue}>{gradesResult.totalGrade}</span></div>
+            </div>
+            <div className={styles.links}>
+              <Link to="/login" className={styles.link}>로그인</Link>
+              <Link to="/" className={styles.link}>글자수 계산기</Link>
+            </div>
     </div>
   );
 };

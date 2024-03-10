@@ -1,0 +1,100 @@
+.newMemberContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    gap: 20px;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  
+  .newMemberContainer form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+  }
+  
+  .newMemberContainer label {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    width: 100%;
+  }
+  
+  .newMemberContainer input[type="email"],
+  .newMemberContainer input[type="tel"],
+  .newMemberContainer input[type="password"],
+  .newMemberContainer input[type="text"] {
+    padding: 10px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    width: 100%;
+    height: 40px;
+    box-sizing: border-box;
+  }
+  
+  .newMemberContainer .inputWithButton {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .newMemberContainer .inputWithButton input {
+    flex-grow: 1;
+    padding: 10px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    height: 40px; 
+  }
+  
+  .newMemberContainer .inputWithButton button {
+    padding: 10px;
+    border: none;
+    background-color: mediumslateblue;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    box-sizing: border-box;
+    height: 40px; 
+    white-space: nowrap; 
+  }
+  
+  .newMemberContainer button[type="submit"] {
+    padding: 12px 20px;
+    border: none;
+    background-color: mediumslateblue;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    width: auto;
+    height: 40px; 
+  }
+  
+  .newMemberContainer .passwordGroup,
+  .newMemberContainer .confirmPasswordGroup {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+    width: 100%;
+  }
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
